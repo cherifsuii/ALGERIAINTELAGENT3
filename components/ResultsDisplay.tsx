@@ -1,8 +1,10 @@
 
 import React from 'react';
+import { unparse } from 'papaparse';
 import type { Entity } from '../types';
 import { EntityCard } from './EntityCard';
 import { Spinner } from './Spinner';
+import { DownloadIcon } from './icons/DownloadIcon';
 
 interface ResultsDisplayProps {
   entities: Entity[];
@@ -43,9 +45,36 @@ export const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ entities, isLoad
       return <NoResults />;
   }
 
+  const handleExport = () => {
+    const csv = unparse(entities, {
+        columns: ['name', 'address', 'phone', 'website', 'facebook', 'lat', 'lon'],
+        header: true,
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.setAttribute('download', 'intelligence-report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
-        <h2 className="text-2xl font-bold mb-4 text-teal-400 border-b-2 border-neutral-700 pb-2">Intelligence Report</h2>
+        <div className="flex justify-between items-center mb-4 pb-2 border-b-2 border-neutral-700">
+            <h2 className="text-2xl font-bold text-teal-400">Intelligence Report</h2>
+            <button
+                onClick={handleExport}
+                className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-full flex items-center transition-all duration-300 ease-in-out"
+                aria-label="Export results to CSV"
+            >
+                <DownloadIcon className="w-5 h-5 mr-2" />
+                <span>Export</span>
+            </button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in">
         {entities.map((entity) => (
             <EntityCard key={entity.id} entity={entity} />

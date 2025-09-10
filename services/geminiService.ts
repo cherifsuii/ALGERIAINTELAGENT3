@@ -3,7 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 import type { Entity } from '../types';
 
 // IMPORTANT: This key is managed by the execution environment. Do not hardcode.
-const API_KEY = process.env.API_KEY;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 if (!API_KEY) {
   // This is a fallback for development, but in production, the key must be set.
