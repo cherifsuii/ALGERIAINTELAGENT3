@@ -5,16 +5,16 @@ import type { Entity } from '../types';
 // IMPORTANT: This key is managed by the execution environment. Do not hardcode.
 const API_KEY = import.meta.env.VITE_API_KEY;
 
-if (!API_KEY) {
-  // This is a fallback for development, but in production, the key must be set.
+let ai: GoogleGenAI | null = null;
+
+if (API_KEY) {
+  ai = new GoogleGenAI({ apiKey: API_KEY });
+} else {
   console.warn("Gemini API key not found in environment variables. AI features will not work.");
 }
 
-const ai = new GoogleGenAI({ apiKey: API_KEY! });
-
-
 export const getSummaryForEntity = async (entity: Entity): Promise<string> => {
-  if (!API_KEY) {
+  if (!ai) {
     return "AI analysis is unavailable: API key is not configured.";
   }
 
