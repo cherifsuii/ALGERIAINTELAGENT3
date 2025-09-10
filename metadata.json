@@ -1,0 +1,5 @@
+{
+  "name": "Algeria Intel Agent",
+  "description": "An AI-powered intelligence agent to discover and learn about businesses and entities across Algerian states (Wilayas). Select a state and a business category to find entities, view their contact information, and get an AI-generated summary.",
+  "requestFramePermissions": []
+}
